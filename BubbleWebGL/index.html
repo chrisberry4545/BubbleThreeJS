@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Bubble Web GL</title>
+</head>
+<body>
+
+    <div>
+        <h1>Bubble Web GL</h1>
+    </div>
+
+
+    <div id="container"></div>
+
+    <button id="addBubble">Add Bubble</button>
+
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="Scripts/three.min.js"></script>
+    <script src="Scripts/OrbitControls.js"></script>
+    <script>
+
+
+        var graphicsHandler = (function () {
+            var WIDTH = 1200,
+              HEIGHT = 600;
+
+            function makeSphere(radius, segments, rings, sphereColor) {
+                //Defaults
+                radius = radius != null ? radius : 7;
+                segments = segments != null ? segments : 16;
+                rings = rings != null ? rings : 16;
+                sphereMaterial = new THREE.MeshLambertMaterial(
+                        {
+                            color: new THREE.Color(sphereColor)
+                        });
+
+                return new THREE.Mesh(
+                    new THREE.SphereGeometry(radius, segments, rings),
+                    sphereMaterial);
+            }
+
+            // set some camera attributes
+            var VIEW_ANGLE = 45,
+              ASPECT = WIDTH / HEIGHT,
+              NEAR = 0.1,
+              FAR = 10000;
+
+            var $container = $('#container');
+
+            var renderer = new THREE.WebGLRenderer();
+            var camera =
+              new THREE.PerspectiveCamera(
+                VIEW_ANGLE,
+                ASPECT,
+                NEAR,
+                FAR);
+            var controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.enableZoom = false;
+
+            var scene = new THREE.Scene();
+            scene.add(camera);
+            // the camera starts at 0,0,0
+            // so pull it back
+            camera.position.z = 300;
+
+            // start the renderer
+            renderer.setSize(WIDTH, HEIGHT);
+
+            // attach the render-supplied DOM element
+            $container.append(renderer.domElement);
+
+            function addLights() {
+                function makeLight() {
+                    var light = new THREE.PointLight(0xFFFFFF);
+                    // set its position
+                    light.position.x = 10;
+                    light.position.y = 50;
+                    light.position.z = 130;
+                    return light;
+                }
+                // create a point light
+                var pointLight2 = makeLight();
+                pointLight2.position.x = -(WIDTH / 2);
+                pointLight2.position.y = 200;
+                pointLight2.position.z = 0;
+
+                var light = new THREE.AmbientLight(0x404040); // soft white light
+                scene.add(light);
+                scene.add(pointLight2);
+            }
+
+            addLights();
+
+            // shim layer with setTimeout fallback
+            window.requestAnimFrame = (function () {
+                return window.requestAnimationFrame ||
+                        window.webkitRequestAnimationFrame ||
+                        window.mozRequestAnimationFrame ||
+                        function (callback) {
+                            window.setTimeout(callback, 1000 / 60);
+                        };
+            })();
+
+            function render() {
+                renderer.render(scene, camera);
+            }
+
+            function Bubble() {
+                this.mesh = makeSphere();
+                this.velocityY = 4;
+                this.velocityX = (Math.random() - 0.5) * 4;
+                this.mesh.position.y = groundLevel;
+            }
+
+            $('#addBubble').click(function () {
+                addNewBubble();
+            });
+
+            function addNewBubble() {
+                var newObj = new Bubble();
+                sceneObjects.push(newObj);
+                scene.add(newObj.mesh);
+            }
+
+            setInterval(function () {
+                addNewBubble();
+            }, 250);
+
+            var sceneObjects = [];
+
+            var gravity = 0.1;
+            var groundLevel = -100;
+
+            function renderSceneObjects() {
+                sceneObjects.forEach(function (obj) {
+                    obj.mesh.position.y += obj.velocityY;
+                    obj.mesh.position.x += obj.velocityX;
+
+                    obj.velocityY -= 0.1;
+
+                    if (obj.mesh.position.y < groundLevel) {
+                        obj.mesh.position.y == groundLevel;
+                        obj.velocityY = -(obj.velocityY * 0.9);
+                    }
+                });
+            }
+
+            (function animloop() {
+
+                requestAnimFrame(animloop);
+
+                renderSceneObjects();
+                render();
+            })();
+        })();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+c:\users\chris\documents\visual studio 2013\Projects\BubbleWebGL\BubbleWebGL\bin\BubbleWebGL.dll.config
+c:\users\chris\documents\visual studio 2013\Projects\BubbleWebGL\BubbleWebGL\bin\BubbleWebGL.dll
+c:\users\chris\documents\visual studio 2013\Projects\BubbleWebGL\BubbleWebGL\bin\BubbleWebGL.pdb
+c:\users\chris\documents\visual studio 2013\Projects\BubbleWebGL\BubbleWebGL\obj\Debug\BubbleWebGL.csprojResolveAssemblyReference.cache
+c:\users\chris\documents\visual studio 2013\Projects\BubbleWebGL\BubbleWebGL\obj\Debug\BubbleWebGL.dll
+c:\users\chris\documents\visual studio 2013\Projects\BubbleWebGL\BubbleWebGL\obj\Debug\BubbleWebGL.pdb
