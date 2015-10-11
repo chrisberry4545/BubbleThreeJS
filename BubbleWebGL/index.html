@@ -111,6 +111,7 @@
                 this.mesh = makeSphere();
                 this.velocityY = 4;
                 this.velocityX = (Math.random() - 0.5) * 4;
+                this.velocityZ = (Math.random() - 0.5) * 4;
                 this.mesh.position.y = groundLevel;
             }
 
@@ -137,8 +138,9 @@
                 sceneObjects.forEach(function (obj) {
                     obj.mesh.position.y += obj.velocityY;
                     obj.mesh.position.x += obj.velocityX;
+                    obj.mesh.position.z += obj.velocityZ;
 
-                    obj.velocityY -= 0.1;
+                    obj.velocityY -= gravity;
 
                     if (obj.mesh.position.y < groundLevel) {
                         obj.mesh.position.y == groundLevel;
